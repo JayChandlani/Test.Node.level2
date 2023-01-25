@@ -27,18 +27,25 @@ const users = [
 
 
 function getUsersInState(users, state) {
-    let sortedUsers = [], averageAge = 0, standarddeviation = 0;
-    for (let i = 0; i < users.length && users.length < 10000; i++) {
-
-        if (state.length >= 2 && typeof state === typeof "" && users[i].state === state) {
-            sortedUsers.push(users[i])
-            averageAge += users[i].age
+    if (state.length >= 2 && typeof state === typeof "" && users.length < 10000) {
+        let averageAge = 0, standarddeviation = 0;
+        let sortedUsers = users.filter(user => user.state === state);
+        if (sortedUsers === []) {
+            averageAge = Math.round(sortedUsers.reduce((a, b) => a.age + b.age) / sortedUsers.length)
+            standarddeviation = Math.round(Math.sqrt(sortedUsers.map(user => Math.pow(user.age - averageAge, 2)).reduce((a, b) => a + b) / sortedUsers.length))
+            return { sortedUsers, averageAge, standarddeviation }
+        } else {
+            return `No record found`
         }
-
+    } else if (users.length > 10000) {
+        return `error length of the data excided`
+    } else if (typeof state !== typeof "") {
+        return `type of state must be string`
+    } else if (state.length < 2) {
+        return `state must be greate than or equal to 2 letters`
+    } else {
+        return `some error occur`
     }
-    averageAge = Math.round(averageAge / sortedUsers.length)
-    standarddeviation = Math.round(Math.sqrt(sortedUsers.map(user => Math.pow(user.age - averageAge, 2)).reduce((a, b) => a + b) / sortedUsers.length))
-    return { sortedUsers, averageAge, standarddeviation }
 }
 // getUsersInState(users, state)
 console.log(getUsersInState(users, 'NY'));
