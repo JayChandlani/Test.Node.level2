@@ -30,7 +30,7 @@ function getUsersInState(users, state) {
     if (state.length >= 2 && typeof state === typeof "" && users.length < 10000) {
         let averageAge = 0, standarddeviation = 0;
         let sortedUsers = users.filter(user => user.state === state);
-        if (sortedUsers === []) {
+        if (sortedUsers.length) {
             averageAge = Math.round(sortedUsers.reduce((a, b) => a.age + b.age) / sortedUsers.length)
             standarddeviation = Math.round(Math.sqrt(sortedUsers.map(user => Math.pow(user.age - averageAge, 2)).reduce((a, b) => a + b) / sortedUsers.length))
             return { sortedUsers, averageAge, standarddeviation }
